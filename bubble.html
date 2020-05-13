@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src = 'bubble.js'>
+        </script>
+        <script>
+            var distance = 100; //distance, in px, of each numbers
+            var list = [1,2,3,4,5,6,7,8,9];
+            shuffle(list);
+            var delay = 6 //ms
+            var step = 1 // how much it moves each delay
+            var safeDelay = 200 // just to be safe
+            var startDelay = 5000
+        </script>
+    </head>
+
+    <body style='background-color: darkslategrey;'>
+        <div id='wrapper'>
+            <div id='t1'>
+
+            </div>
+        </div>
+    <script>
+        father = document.getElementById('wrapper');
+        father.style.marginLeft = 'auto'
+        father.style.marginRight = 'auto'
+        elements = []
+        for(i = 0; i < list.length; i++){
+            d = document.createElement('div');
+            d.innerText = list[i];
+            d.style.fontSize = '60px'
+            d.style.position = 'absolute';
+            d.style.left = distance*i + 'px';
+            d.style.top = Math.floor(window.screen.height/3) + 'px'
+            father.appendChild(d);
+            elements.push(d)
+        }
+        var change = bubble(list);
+        setPos = function(dupla, posi, posj){
+            console.log(elements)
+            d0 = elements[dupla[0]]
+            console.log(d0)
+            d0.style.left = posi + 'px';
+            d1 = elements[dupla[1]]
+            d1.style.left = posj + 'px';
+        }
+        recursion = function(){
+        
+            
+            console.log(list);
+            change = bubble(list);
+            if(change == -1){
+                return
+            }
+            let totalDist = distance*(change[1] - change[0])
+            for(i=1; i<=totalDist; i++){
+                setTimeout(setPos, i*delay, change, distance*change[0] + i, distance*change[1] - i)
+            }
+            bigSwap = function(list, change, elements){
+                swap(list, change)
+                console.log(elements, change)
+                elements[change[0]].innerText = list[change[0]]
+                elements[change[0]].style.left = change[0]*distance + 'px'
+                elements[change[1]].innerText = list[change[1]]
+                elements[change[1]].style.left = change[1]*distance + 'px'
+            }
+
+            setTimeout(bigSwap, totalDist*delay + safeDelay, list, change, elements);
+            setTimeout(recursion, totalDist*delay + safeDelay)
+
+        }
+        setTimeout(recursion, startDelay)
+
+    </script>
+    </body>
+</html>
